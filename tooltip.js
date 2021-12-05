@@ -86,11 +86,11 @@ $(document).ready(function () {
       $.ajax({
         url: url,
       })
-        .catch(function (err) {
-          resolve(null);
-        })
         .then(function (data) {
-          resolve(data[0]);
+          return resolve(data[0]);
+        })
+        .catch(function (err) {
+          return resolve(null);
         });
     });
   }
@@ -309,7 +309,12 @@ $(document).ready(function () {
 
     // Reposition top to stay on screen on short displays
     if (top + rect.height > window.innerHeight && linkRect != null) {
-      top = top - linkRect.top - marginBuffer;
+      if (linkRect.top <= window.innerHeight / 2) {
+        top = top - linkRect.top - marginBuffer;
+      }
+      else {
+        top = top - rect.height;
+      }
     }
         
     $tooltip.css({
