@@ -23,19 +23,10 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  min-width: 300px;
-  max-width: 500px;
+  width: 500px;
   min-height: 100px;
   background-color: rgba(0, 0, 0, 0.7);
   font-family: 'exocetlight', Arial, Helvetica, sans-serif;
-}
-
-.item-tooltip.tooltipIsLoading .item-tooltip-content {
-  display: none;
-}
-
-.item-tooltip.tooltipIsLoading .item-tooltip-loading {
-  display: flex;
 }
 
 .item-tooltip.tooltipIsVisible {
@@ -43,16 +34,18 @@ body {
 }
 
 .item-tooltip-content {
+  display: none;
   padding: 10px;
   text-align: center;
   font-size: 20px;
+  line-height: 22px;
 }
 
 .item-tooltip-content,
 .item-tooltip-attrs {
   display: flex;
   flex-direction: column;
-  row-gap: 3px;
+  row-gap: 4px;
 }
 
 .item-quality-unique {
@@ -69,20 +62,6 @@ body {
 
 .item-quality-magic {
   color: #8383ea !important;
-}
-
-.item-tooltip-loading {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  text-align: center;
-  z-index: 1;
-  color: white;
-  flex-direction: column;
-  justify-content: center;
 }
 
 .item-tooltip-attr {

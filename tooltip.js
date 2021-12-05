@@ -24,7 +24,6 @@ $(document).ready(function () {
   var itemTooltipData = {},
     $tooltipLinks = $('[data-autolink-id], .tooltip-link'),
     $tooltip = $('.item-tooltip'),
-    $content = $('.item-tooltip-content'),
     $pricing = $('.item-tooltip-pricing'),
     $pricingLow = $('.pricing-content-low'),
     $pricingHigh = $('.pricing-content-high'),
@@ -87,6 +86,9 @@ $(document).ready(function () {
       $.ajax({
         url: url,
       })
+        .catch(function (err) {
+          resolve(null);
+        })
         .then(function (data) {
           resolve(data[0]);
         });
@@ -222,6 +224,8 @@ $(document).ready(function () {
     if (price_low.length && price_high.length) {
       $pricing.addClass('isVisible');
     }
+
+    $tooltip.addClass('tooltipIsVisible');
   }
 
   // Set each autolink's tooltip ID based on the title of the link
@@ -245,7 +249,6 @@ $(document).ready(function () {
       var tooltipId = $(this).attr('data-tooltip-id');
       var localDataEntry = itemTooltipData[tooltipId];
 
-      $tooltip.addClass('tooltipIsVisible');
       // Get the item's data if it's not stored locally
       if (!itemTooltipData.hasOwnProperty(tooltipId)) {
         getItemData(tooltipId)
@@ -260,7 +263,6 @@ $(document).ready(function () {
 
               // Render the tooltip
               renderTooltip(itemData);
-              $tooltip.removeClass('tooltipIsLoading');
             }
             // No item data; hide the tooltip
             else {
@@ -272,7 +274,6 @@ $(document).ready(function () {
       // Retrieve the tooltip data from the cache after already fetched
       else if (localDataEntry != null) {
         renderTooltip(localDataEntry);
-        $tooltip.removeClass('tooltipIsLoading');
       }
       // Hide the tooltip if there's no data for the link
       else {
@@ -280,18 +281,40 @@ $(document).ready(function () {
       }
     }).mouseout(function (e) {
       $tooltip.removeClass('tooltipIsVisible');
-      $tooltip.addClass('tooltipIsLoading');
       emptyTooltip();
     });
   });
 
   // Track the tooltip with the mouse
   document.addEventListener('mousemove', function (e) {
-    if ($tooltip.hasClass('tooltipIsVisible')) {
-      $tooltip.css({
-        top: e.pageY + 20,
-        left: e.pageX + 20
-      });
+    var top = e.pageY,
+        left = e.pageX,
+        marginBuffer = 20,
+        rect = $tooltip[0].getBoundingClientRect(),
+        linkRect;
+
+    // Check if we have hovered over a tooltip link
+    if (e.target.getAttribute('data-tooltip-id')) {
+      linkRect = e.target.getBoundingClientRect();
     }
+
+    // Re-position left side to stay on screen
+    if (left + rect.width > window.innerWidth) {
+      left = e.pageX - rect.width - marginBuffer * 2;
+
+      if (left < 0) {
+        left = -marginBuffer;
+      }
+    }
+
+    // Reposition top to stay on screen on short displays
+    if (top + rect.height > window.innerHeight && linkRect != null) {
+      top = top - linkRect.top - marginBuffer;
+    }
+        
+    $tooltip.css({
+      top: top + marginBuffer,
+      left: left + marginBuffer
+    });
   })
 });
