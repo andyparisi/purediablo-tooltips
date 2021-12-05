@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+  <!-- this tooltip element needs to go right inside the <body> tag -->
+  <div class="item-tooltip tooltipIsLoading">
+    <div class="item-tooltip-loading">
+      Loading...
+    </div>
+    <div class="item-tooltip-content">
+      <div class="item-tooltip-title"></div>
+      <div class="item-tooltip-type"></div>
+      <div class="item-tooltip-attrs"></div>
+      <div class="item-tooltip-pricing">
+        <header class="pricing-header">Estimated market value</header>
+        <div class="pricing-content">
+          <div class="pricing-content-low"></div>
+          <div class="pricing-content-high"></div>
+        </div>
+        <div class="pricing-labels">
+          <div class="pricing-label-low">Low</div>
+          <div class="pricing-label-high">High</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end tooltip -->
+
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <!-- sample autolinks -->
+  <a data-autolink-id="521" target="_blank"
+    href="https://www.purediablo.com/diablo-2/unique-belts/#Verdungo8217s_Hearty_Cord"
+    title="Verdungo's Hearty Cord">Verdungo’s Hearty Cord</a>
+  <a data-autolink-id="522" target="_blank"
+    href="https://www.purediablo.com/diablo-2/unique-belts/#Verdungo8217s_Hearty_Cord" title="The Grandfather">The
+    Grandfather</a>
+  <a class="tooltip-link" target="_blank"
+    href="https://www.purediablo.com/diablo-2/unique-belts/#Verdungo8217s_Hearty_Cord">Tal Rasha's Lidless Eye</a>
+  <!-- end autolinks -->
+
+  <script src="tooltip.js"></script>
+
+</body>
+
+</html>
