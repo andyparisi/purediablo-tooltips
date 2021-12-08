@@ -27,6 +27,8 @@ body {
   min-height: 100px;
   background-color: rgba(0, 0, 0, 0.7);
   font-family: 'exocetlight', Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+  z-index: 999;
 }
 
 .item-tooltip.tooltipIsVisible {
@@ -90,17 +92,7 @@ body {
   font-size: 18px;
   font-weight: bold;
   vertical-align: middle;
-}
-
-.pricing-header:before {
-  content: '';
-  display: inline-block;
-  width: 27px;
-  height: 27px;
-  background: url(./gold.png) no-repeat;
-  background-size: 100%;
-  vertical-align: middle;
-  margin-right: 5px;
+  text-transform: none;
 }
 
 .pricing-content {
