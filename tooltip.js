@@ -298,6 +298,10 @@ $(document).ready(function () {
       linkRect = e.target.getBoundingClientRect();
     }
 
+    if (linkRect == null) {
+      return;
+    }
+
     // Re-position left side to stay on screen
     if (left + rect.width > window.innerWidth) {
       left = e.pageX - rect.width - marginBuffer * 2;
@@ -308,7 +312,7 @@ $(document).ready(function () {
     }
 
     // Reposition top to stay on screen on short displays
-    if (top + rect.height > window.innerHeight && linkRect != null) {
+    if (top + rect.height > window.innerHeight) {
       if (linkRect.top <= window.innerHeight / 2) {
         top = top - linkRect.top - marginBuffer;
       }
