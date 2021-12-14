@@ -3,24 +3,20 @@ $(document).ready(function () {
   var marketValues = [
     { value: 1, name: 'Perfect Gem', file: 'perfect_topaz.png' },
     { value: 2, name: 'Perfect Skull', file: 'perfect_skull.png' },
-    { value: 3, name: 'Lum', file: 'lum_rune.png' },
-    { value: 4, name: 'Ko', file: 'ko_rune.png' },
-    { value: 5, name: 'Fal', file: 'fal_rune.png' },
-    { value: 6, name: 'Lem', file: 'lem_rune.png' },
-    { value: 12, name: 'Pul', file: 'pul_rune.png' },
-    { value: 24, name: 'Um', file: 'um_rune.png' },
-    { value: 50, name: 'Mal', file: 'mal_rune.png' },
-    { value: 100, name: 'Ist', file: 'ist_rune.png' },
-    { value: 125, name: 'Gul', file: 'gul_rune.png' },
-    { value: 200, name: 'Cham', file: 'cham_rune.png' },
-    { value: 250, name: 'Vex', file: 'vex_rune.png' },
-    { value: 450, name: 'Zod', file: 'zod_rune.png' },
-    { value: 650, name: 'Ohm', file: 'ohm_rune.png' },
-    { value: 1050, name: 'Sur', file: 'sur_rune.png' },
-    { value: 1150, name: 'Lo', file: 'lo_rune.png' },
-    { value: 1750, name: 'Jah', file: 'jah_rune.png' },
-    { value: 2150, name: 'Ber', file: 'ber_rune.png' }
+    { value: 3, name: 'Lum Rune', file: 'lum_rune.png' },
+    { value: 6, name: 'Lem Rune', file: 'lem_rune.png' },
+    { value: 12, name: 'Pul Rune', file: 'pul_rune.png' },
+    { value: 24, name: 'Um Rune', file: 'um_rune.png' },
+    { value: 50, name: 'Mal Rune', file: 'mal_rune.png' },
+    { value: 100, name: 'Ist Rune', file: 'ist_rune.png' },
+    { value: 350, name: 'Vex Rune', file: 'vex_rune.png' },
+    { value: 650, name: 'Ohm Rune', file: 'ohm_rune.png' },
+    { value: 1150, name: 'Lo Rune', file: 'lo_rune.png' },
+    { value: 2150, name: 'Ber Rune', file: 'ber_rune.png' }
   ];
+  var runeGemRegExp = new RegExp(marketValues.map(function (m) {
+    return m.name.toLowerCase();
+  }).join('|'), 'i');
   var itemTooltipData = {},
     $tooltipLinks = $('[data-autolink-id], .tooltip-link'),
     $tooltip = $('.item-tooltip'),
@@ -32,10 +28,14 @@ $(document).ready(function () {
     $type = $('.item-tooltip-type'),
     runeValueUrlPrefix = 'https://www.purediablo.com/wp-content/uploads/2021/04/';
 
+  function isRuneOrGem(name) {
+    return name.search(runeGemRegExp) > -1;
+  }
+
   /**
    * Calculates the market value of the item
    */
-  function getMarketValue(price) {
+  function getMarketValue(price, itemName) {
     var i = marketValues.length - 1,
         output = [];
 
@@ -46,16 +46,18 @@ $(document).ready(function () {
       var quotient = price / value;
       
       // How many of this rune can we get?
-      if (quotient >= 1) {
-        for (var j = 0; j < Math.floor(quotient); j++) {
-          output.push(val);
+      if (name !== itemName) {
+        if (quotient >= 1) {
+          for (var j = 0; j < Math.floor(quotient); j++) {
+            output.push(val);
+          }
+          price = price % value;
         }
-        price = price % value;
-      }
 
-      // End the loop when we are all used up
-      if (price === 0) {
-        break;
+        // End the loop when we are all used up
+        if (price === 0) {
+          break;
+        }
       }
           
       i--;
@@ -124,7 +126,7 @@ $(document).ready(function () {
   }
 
   function addRuneValue(rune, $el) {
-    $el.append('<div class="pricing-rune">' + '<img src="' + runeValueUrlPrefix + rune.file + '" /><div class="pricing-rune-name">' + rune.name + '</div></div>');
+    $el.append('<div class="pricing-rune">' + '<img src="' + runeValueUrlPrefix + rune.file + '" /><div class="pricing-rune-name">' + rune.name.split(' Rune')[0] + '</div></div>');
   }
 
   /**
@@ -154,24 +156,26 @@ $(document).ready(function () {
     var modifiers = parseModifiers(data.acf);
 
     var name = attrs.d2i_item_name,
-      type = attrs.d2i_item_type,
-      defense = attrs.d2i_defense,
-      quality = attrs.d2i_quality,
-      durability = attrs.d2i_durability,
-      reqLevel = attrs.d2i_required_level,
-      reqDex = attrs.d2i_required_dexterity,
-      reqStr = attrs.d2i_required_strength,
-      dmgTwoHand = attrs.d2i_two_hand_damage,
-      dmgOneHand = attrs.d2i_one_hand_dmg,
-      weaponSpeed = attrs.d2i_weapon_speed,
-      weaponClass = attrs.d2i_weapon_class,
-      price_low = attrs.price_low,
-      price_high = attrs.price_high;
+        type = attrs.d2i_item_type,
+        defense = attrs.d2i_defense,
+        quality = attrs.d2i_quality,
+        durability = attrs.d2i_durability,
+        reqLevel = attrs.d2i_required_level,
+        reqDex = attrs.d2i_required_dexterity,
+        reqStr = attrs.d2i_required_strength,
+        dmgTwoHand = attrs.d2i_two_hand_damage,
+        dmgOneHand = attrs.d2i_one_hand_dmg,
+        weaponSpeed = attrs.d2i_weapon_speed,
+        weaponClass = attrs.d2i_weapon_class,
+        price_low = attrs.price_low,
+        price_high = attrs.price_high;
 
     var itemQualityClass = getQualityClass(quality);
 
     $title.html(name).addClass(itemQualityClass);
-    $type.html(type).addClass(itemQualityClass);
+
+    // Only show the type for non-runes/gems
+    $type.html(isRuneOrGem(name) ? '' : type).addClass(itemQualityClass);
 
     // Render the item attributes
     if (hasValue(defense)) {
@@ -258,8 +262,8 @@ $(document).ready(function () {
               itemTooltipData[tooltipId] = itemData;
 
               // Set the calculated rune values
-              itemTooltipData[tooltipId].acf.price_low = getMarketValue(itemData.acf.d2i_price);
-              itemTooltipData[tooltipId].acf.price_high = getMarketValue(itemData.acf.d2i_high_price);
+              itemTooltipData[tooltipId].acf.price_low = getMarketValue(itemData.acf.d2i_price, itemData.acf.d2i_item_name);
+              itemTooltipData[tooltipId].acf.price_high = getMarketValue(itemData.acf.d2i_high_price, itemData.acf.d2i_item_name);
 
               // Render the tooltip
               renderTooltip(itemData);
